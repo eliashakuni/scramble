@@ -1,0 +1,254 @@
+html, body, #root {
+    height: 100vh;
+}
+
+body {
+    background-color: rgb(65, 65, 97);
+}
+
+.page {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: auto 40px 40px 40px 408px;
+    grid-template-rows: 55px 60px auto 10px 40px;
+    grid-template-areas: 
+    "cw cw cw cw backspace" 
+    ". sw sw sw ." 
+    "letters letters . lists lists" 
+    ". timer timer timer ." 
+    "results timer timer timer new-game";
+    padding: 20px;
+    width: 775px;
+    background-color: rgb(41, 41, 41);
+    border-radius: 30px;
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    -webkit-box-shadow: 3px 6px 16px 0px rgba(0, 0, 0, 0.45);
+    -moz-box-shadow: 3px 6px 16px 0px rgba(0, 0, 0, 0.45);
+    box-shadow: 3px 6px 16px 0px rgba(0, 0, 0, 0.45);
+}
+
+.timer {
+    grid-area: timer;
+    transition-duration: 0.3s;
+    font-size: 40px;
+    background-color: #c2c2c2;
+    border: 3px solid black;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.table {
+    grid-area: letters;
+    display: grid;
+    grid-template-columns: 60px 60px 60px 60px;
+    grid-template-rows: 60px 60px 60px 60px;
+    grid-template-areas: 
+    "p00 p01 p02 p03" 
+    "p10 p11 p12 p13" 
+    "p20 p21 p22 p23" 
+    "p30 p31 p32 p33";
+    gap: 4px;
+    padding: 5px;
+    height: 252px;
+    border-radius: 15px;
+    border: rgb(30, 30, 30) solid 2px;
+}
+
+.table-letter {
+    font-size: 40px;
+}
+
+.square {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition-duration: 0.3s;
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    background-color: #dfdfdf;
+    border: none;
+    color: black;
+    padding: 0px;
+    text-align: center;
+    margin: 0px;
+    cursor: pointer;
+}
+
+.current-word {
+    grid-area: cw;
+    display: flex;
+    align-items: center;
+    padding-left: 5px;
+    transition-duration: 0.3s;
+    float: left;
+    width: auto;
+    height: 45px;
+    font-size: 35px;
+    background-color: #c2c2c2;
+    border: 3px solid black;
+    border-radius: 5px;
+}
+
+.new-game, .results, .backspace, .send-word {
+    transition-duration: 0.3s;
+    border-radius: 10px;
+    background-color: #dfdfdf;
+    border: 3px solid black;
+    color: black;
+    padding: 0px;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.send-word {
+    grid-area: sw;
+    font-size: 38px;
+    width: auto;
+    height: 50px;
+}
+
+.backspace {
+    grid-area: backspace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    height: 45px;
+    width: 100px;
+}
+
+.new-game {
+    grid-area: new-game;
+    font-size: 25px;
+    width: 150px;
+    vertical-align: middle;
+    float: left;
+}
+
+.results-container {
+    grid-area: results;
+}
+
+.results {
+    font-size: 25px;
+    width: 120px;
+    vertical-align: middle;
+    float: right;
+}
+
+.square-non-clickable {
+    cursor: default;
+}
+
+.square-non-clickable:active {
+    background-color: #da8d8d
+}
+
+.hoverable:hover {
+    background-color: #f5f5f5;
+}
+
+.square-path {
+    width: 52px;
+    height: 52px;
+    background-color: #c0c0c0;
+    border-radius: 20px;
+    border: 4px solid #999999;
+}
+
+.square-current {
+    width: 52px;
+    height: 52px;
+    background-color: #b1b1b1;
+    border-radius: 20px;
+    border: 4px solid #696969;
+}
+
+.list-view {
+    grid-area: lists;
+    display: flex;
+    flex-direction: row;
+}
+
+.correct-list, .incorrect-list, .end-list {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    padding: 10px;
+    background-color: #c2c2c2;
+    border-radius: 10px;
+}
+
+.correct-list {
+    width: 202px;
+    margin-right: 4px;
+}
+
+.incorrect-list {
+    width: 202px;
+}
+
+.end-list {
+    width: 428px;
+}
+
+.correct-word {
+    color: green;
+    font-size: 16px;
+    margin-right: 6px;
+}
+
+.incorrect-word {
+    color: red;
+    font-size: 16px;
+    margin-right: 6px;
+}
+
+.end-word {
+    color: black;
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.word-container {
+    height: 22px;
+}
+
+.points {
+    font-style: italic;
+}
+
+.disabled-button {
+    color: gray;
+    cursor: default;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    transition-duration: 0.3s;
+    text-decoration: none;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+a:active {
+    text-decoration: none;
+}

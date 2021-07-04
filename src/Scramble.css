@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap');
+
+html,
+body,
+.page,
+.wrapper {
+    margin: 0;
+    padding: 0;
+}
+.backspace, .new-game, .results {
+    display: none;
+}
+
+.wrapper {
+    height: 100vh;
+    width: 100%;
+    background-color: #414161;
+    display: grid;
+    grid-template-columns: 20vw 80vw;
+    grid-template-rows: 20vw 1fr 2fr 100vw 2fr;
+    grid-template-areas: 
+    "latest-word latest-word"
+    "timer timer"
+    "current-word current-word"
+    "table table"
+    "send-word send-word";
+}
+
+.latest-word {
+    grid-area: latest-word;
+}
+
+.timer {
+    grid-area: timer;
+}
+
+.current-word {
+    grid-area: current-word;
+    background-color: hsl(64, 20%, 60%);
+    border-top: 1.5vw solid hsl(64, 50%, 80%);
+    border-bottom: 1.5vw solid hsl(64, 50%, 80%);
+    margin: 1vw 0;
+}
+
+.table {
+    grid-area: table;
+    box-sizing: border-box;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 22vw 22vw 22vw 22vw;
+    grid-template-areas: 
+    "p00 p01 p02 p03" 
+    "p10 p11 p12 p13" 
+    "p20 p21 p22 p23" 
+    "p30 p31 p32 p33";
+    padding: 2vw;
+    gap: 3vw;
+}
+
+.square {
+    margin: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 250ms ease-out;
+    width: 100%;
+    height: 100%;
+    border-radius: 4vw;
+    background-color: #dfdfdf;
+    border: 2vw solid #414141;
+    font-family: 'Bree Serif', serif;
+    font-size: 2rem;
+    overflow: hidden;
+    padding: 0;
+    cursor: pointer;
+}
+
+.send-word {
+    grid-area: send-word;
+}
+
+.disabled-button {
+    padding: 1px; /*remove??*/
+}
