@@ -20,7 +20,7 @@ class Timer extends React.Component {
     }
 
     render() {
-        let minutes = Math.floor(this.state.time / 60).toString();
+        let minutes = "0" + Math.floor(this.state.time / 60).toString();
         let seconds = (this.state.time % 60).toString();
         if (seconds < 10) {
             seconds = "0" + seconds;

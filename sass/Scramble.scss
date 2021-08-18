@@ -84,6 +84,8 @@ DISPLAY ELEMENTS
     margin: 2vw 1vw 1vw 2vw;
     font-family: "Nunito", sans-serif;
     line-height: 1.8rem;
+    width: calc(100%-3vw);
+    height: calc(100%-3vw);
     display: grid;
     grid-template-rows: auto 17vw;
     grid-template-areas:
@@ -603,9 +605,16 @@ TABLET / LANDSCAPE
         border: 0.5rem solid var(--light-yellow);
     }
 
+    .misc-container {
+        width: calc(100% - 3rem);
+        height: calc(100% - 3rem);
+    }
+
     .results-misc-container {
         margin: 1.5rem 0.75rem 1.5rem 1.5rem;
         grid-template-rows: 1fr 16vh;
+        width: calc(100% - 2.25rem);
+        height: calc(100% - 3rem);
     }
 
     .results-list-view-container {
