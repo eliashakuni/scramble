@@ -113,7 +113,7 @@ function squareClassName(position, path, viewType, layer) {
         squareType += " " + layer + "square-path";
     } else if (Math.abs(path[path.length - 1][0] - position[0]) <= 1 && Math.abs(path[path.length - 1][1] - position[1]) <= 1) { //check if in a neighbour square to the current (meaning, if it's clickable)
         squareType += " square-clickable hoverable";
-    } else {
+    } else if (layer === "over-") {
         squareType += " square-non-clickable";
     }
     return squareType;

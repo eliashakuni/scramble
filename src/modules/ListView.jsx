@@ -6,7 +6,11 @@ function ListView(props) {
 
     useEffect(() => {
         if (props.viewType === "game-active") {
-            props.updateWordAnimationPositions(listPositionRef.current.getBoundingClientRect(), "list-position")
+            setTimeout(() => {
+                if (listPositionRef.current) {
+                    props.updateWordAnimationPositions(listPositionRef.current.getBoundingClientRect(), "list-position")
+                }
+            }, 550)
         }
         if (props.animation) {
             listScrollRef.current.scrollTo({
@@ -50,7 +54,7 @@ function ListView(props) {
 
     const displayEndList = () => {
         return (
-            <div className="list-view-container">
+            <div className="results-list-view-container">
                 <ul className="display-list">
                     {props.wordList.map((word) => {
                         let index = props.guessList.indexOf(word)

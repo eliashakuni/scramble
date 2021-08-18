@@ -1,10 +1,18 @@
 import { useState } from 'react';
 
 const MenuWindow = (props) => {
-    const [currentMenu, setCurrentMenu] = useState("");
+    const [state, setState] = useState({currentMenu: "", showMenu: false});
+ 
+    if (props.menuWindowType && !state.showMenu) {
+        setState({currentMenu: props.menuWindowType, showMenu: true});
+    }
 
-    if (props.menuWindowType && (props.menuWindowType !== currentMenu)) {
-        setCurrentMenu(props.menuWindowType);
+    if ((props.menuWindowType !== state.currentMenu) && state.showMenu) {
+        setTimeout(() => { setState({currentMenu: state.currentMenu, showMenu: false}) }, 500)
+    }
+
+    if (!state.showMenu) {
+        return null;
     }
 
     const menuWindowContent = () => {
@@ -36,7 +44,7 @@ const MenuWindow = (props) => {
             case "new-game-question":
                 return (<>
                     <p>Oletko varma että haluat aloittaa uuden pelin? Tämänhetkinen peli päättyy.</p>
-                    <button className={"main-menu-button" + (props.newTableLoaded ? " disabled-button" : " hoverable")} onClick={() => { props.newGame(); props.handleMenuWindowChange(""); }}>Uusi peli</button>
+                    <button className="main-menu-button hoverable" onClick={() => {props.newGame(); props.handleMenuWindowChange("")}}>Uusi peli</button>
                     <button className="main-menu-button hoverable" onClick={() => props.handleMenuWindowChange("main-menu")}>Peruuta</button>
                 </>
                 )
@@ -47,13 +55,16 @@ const MenuWindow = (props) => {
     }
 
     return (
-        <div className={"menu-window" + (props.menuWindowType ? " window-visible" : " window-out")}>
-            {menuWindowContent()}
-            {/* <MenuWindowContent type={currentMenu}
+        <div className="menu-window-container">
+            <div className="menu-background" onClick={() => props.handleMenuWindowChange("")}></div>
+            <div className={"menu-window" + (props.menuWindowType ? " window-visible" : " window-out")}>
+                {menuWindowContent()}
+                {/* <MenuWindowContent type={currentMenu}
                 newGame={() => props.newGame()}
                 handleMenuWindowChange={(menuWindowType) => props.handleMenuWindowChange(menuWindowType)}
                 results={() => props.results()}
                 newTableLoaded={props.newTableLoaded} /> */}
+            </div>
         </div>
     );
 }

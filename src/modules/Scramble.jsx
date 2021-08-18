@@ -7,42 +7,40 @@ import WordAnimation from "./WordAnimation.jsx"
 class Scramble extends React.Component {
     constructor(props) {
         super(props);
-        this.wordAnimationPositions = [{ x: 0, y: 0 }, { x: 0, y: 0 }, false]; // [currentWord, firstListChild, isFirstListChild set?]
-        this.listAnimationDistance = 0;
+        this.wrapperRef = React.createRef();
+        this.wordAnimationPositions = [{ x: 0, y: 0 }, { x: 0, y: 0 }, false, { x: 0, y: 0 }]; // [currentWord, firstListChild, isFirstListChild set?, wrapper]
+        this.firstTime = true;
         this.state = {
-            newTableLoaded: true, //should be false
+            newTableLoaded: false,
             currentView: "new-game",
             table: [
-                ["A", "B", "C", "D"],
-                ["E", "F", "G", "H"],
-                ["I", "J", "K", "L"],
-                ["M", "N", "O", "P"],
-            ], //should be without the letters
-            nextTable: [
-                ["A", "B", "C", "D"],
-                ["E", "F", "G", "H"],
-                ["I", "J", "K", "L"],
-                ["M", "N", "O", "P"],
-            ], //should be empty array
+                ["", "", "", ""],
+                ["", "", "", ""],
+                ["", "", "", ""],
+                ["", "", "", ""],
+            ],
+            nextTable: [],
             wordList: [],
-            guessList: ["qwerty", "dvorak"],
-            guessResultList: [true, false],
-            maxPoints: 1337,
+            nextWordList: [],
+            guessList: [],
+            guessResultList: [],
+            maxPoints: 0,
             menuWindowType: "",
             animation: false,
             screenSize: [window.innerWidth, window.innerHeight]
-
         };
     }
 
     handleResize = () => {
         this.wordAnimationPositions[2] = false;
-        this.setState({screenSize: [window.innerWidth, window.innerHeight]});
+        this.wordAnimationPositions[3] = this.wrapperRef.current.getBoundingClientRect();
+        this.setState({ screenSize: [window.innerWidth, window.innerHeight] });
     }
 
     componentDidMount() {
-        //this.loadNewTable();
+        this.loadNewTable();
         window.addEventListener('resize', this.handleResize);
+        this.wordAnimationPositions[3] = this.wrapperRef.current.getBoundingClientRect();
     }
 
     componentWillUnmount() {
@@ -50,22 +48,24 @@ class Scramble extends React.Component {
     }
 
     newGame = () => {
-        if (!this.state.newTableLoaded) {
-            return;
-        }
         this.setState({
             currentView: "new-game",
             guessList: [],
-            guessResultList: [],
-            table: this.state.nextTable,
-            wordList: ["abcd", "efgh"], //nextWordList
-            newTableLoaded: false,
+            guessResultList: []
         });
-        this.loadNewTable();
     }
 
     startGame = () => {
-        this.setState({ currentView: "game-active" })
+        if (this.state.newTableLoaded) {
+            this.setState({
+                currentView: "game-active",
+                newTableLoaded: false,
+                table: this.state.nextTable,
+                wordList: this.state.nextWordList
+            });
+            this.firstTime = false;
+            this.loadNewTable();
+        }
     }
 
     results = () => {
@@ -73,14 +73,13 @@ class Scramble extends React.Component {
     }
 
     loadNewTable() {
-        this.setState({ newTableLoaded: true });
-        /* fetch(
-                'http://hakuni.se/scramble/php/scramble.php',
-                { method: 'GET' }
-            )
-                .then(response => response.json())
-                .then((response) => { this.setState({ nextTable: response.table, nextWordList: response.wordList, newTableLoaded: true, maxPoints: response.points});}
-                ); */
+        fetch(
+            'http://hakuni.se/scramble/php/scramble.php',
+            { method: 'GET' }
+        )
+            .then(response => response.json())
+            .then((response) => { this.setState({ nextTable: response.table, nextWordList: response.wordList, newTableLoaded: true, maxPoints: response.points }); })
+            .then(() => { if (!this.state.wordList.length) { this.newGame(); } });
     }
 
     handleSendClick = (currentWord) => {
@@ -99,6 +98,7 @@ class Scramble extends React.Component {
             guessResultList: newGuessResultList,
             animation: true
         });
+
         setTimeout(() => { this.setState({ animation: false }) }, 500);
     };
 
@@ -119,16 +119,17 @@ class Scramble extends React.Component {
     render() {
         return (
             <div className="page">
-                <div className="wrapper" style={{
-                    '--position-start-x': (this.wordAnimationPositions[0].x + 'px'),
-                    '--position-start-y': (this.wordAnimationPositions[0].y + 'px'),
-                    '--position-end-x': (this.wordAnimationPositions[1].x + 'px'),
-                    '--position-end-y': (this.wordAnimationPositions[1].y + 'px'),
+                <div ref={this.wrapperRef} className="wrapper" style={{
+                    '--position-start-x': ((this.wordAnimationPositions[0].x - this.wordAnimationPositions[3].x) + 'px'),
+                    '--position-start-y': ((this.wordAnimationPositions[0].y - this.wordAnimationPositions[3].y) + 'px'),
+                    '--position-end-x': ((this.wordAnimationPositions[1].x - this.wordAnimationPositions[3].x) + 'px'),
+                    '--position-end-y': ((this.wordAnimationPositions[1].y - this.wordAnimationPositions[3].y) + 'px'),
                 }}>
                     {/* <div className={this.state.active ? "backspace hoverable" : "backspace disabled-button"} onClick={this.handleBackspaceClick}>
                         <p>⬅</p>
                     </div> */}
                     <GameView viewType={"new-game"}
+                        firstTime={this.firstTime}
                         currentView={this.state.currentView}
                         newTableLoaded={this.state.newTableLoaded}
                         startGame={this.startGame} />

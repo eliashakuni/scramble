@@ -22,9 +22,9 @@ const GameView = (props) => {
     }
 
     const createGrid = () => {
-        if ((props.viewType === "game-active") && (props.screenSize[0] > props.screenSize[1])) {
+        if ((props.viewType === "game-active") && (props.screenSize[0] > props.screenSize[1]) && (props.screenSize[0] < 1025)) {
             return ({
-                gridTemplateColumns: "1fr " + (props.screenSize[1] - 256) + "px 1fr",
+                gridTemplateColumns: "1fr " + (props.screenSize[1] - 304) + "px 1fr", //304px = 2x8rem + 2x1.5rem margin. 
                 gridTemplateRows: "8rem 1fr 8rem",
                 gridTemplateAreas: "'current-word current-word current-word' 'misc-container table list-view-container' 'misc-container send-word list-view-container'",
             })
@@ -62,7 +62,7 @@ const GameView = (props) => {
             )
         }
         return (
-            <div className={"new-game-view" + (typeIsCurrent ? " view-in" : " view-out")}>
+            <div className={"new-game-view" + (props.firstTime ? "" : (typeIsCurrent ? " view-in" : " view-out"))}>
                 <button className={"new-game-button" + (!props.newTableLoaded ? " disabled-button" : " hoverable")} onClick={props.startGame}>
                     {props.newTableLoaded ? "Aloita" : "Ladataan..."}
                 </button>

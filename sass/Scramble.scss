@@ -14,7 +14,6 @@ body {
     --medium-purple: hsl(243, 17%, 43%);
     --medium-blue: hsl(223, 27%, 43%);
     --light-blue: hsl(223, 27%, 77%);
-    --dark-yellow: hsl(64, 20%, 40%);
     --middle-yellow: hsl(64, 20%, 70%);
     --light-yellow: hsl(64, 50%, 80%);
     --dark-gray: hsl(0, 0%, 25%);
@@ -63,20 +62,24 @@ DISPLAY ELEMENTS
 }
 
 .list-view-container,
-.misc-container {
+.results-list-view-container,
+.misc-container,
+.results-misc-container {
     background-color: var(--middle-yellow);
     border: 1.5vw solid var(--light-yellow);
     margin: 2vw;
     border-radius: 5vw;
 }
 
-.list-view-container {
+.list-view-container,
+.results-list-view-container {
     grid-area: list-view-container;
     position: relative;
     margin: 2vw 2vw 1vw 1vw;
 }
 
-.misc-container {
+.misc-container,
+.results-misc-container {
     grid-area: misc-container;
     margin: 2vw 1vw 1vw 2vw;
     font-family: "Nunito", sans-serif;
@@ -91,12 +94,14 @@ DISPLAY ELEMENTS
 .words,
 .points {
     text-align: center;
+    margin: 0;
 }
 
 .grade {
     font-size: 1.5rem;
     text-align: center;
     padding-top: 1rem;
+    margin: 0;
 }
 
 .timer-and-score-container {
@@ -342,7 +347,7 @@ WORD ANIMATION
     position: absolute;
     top: 0;
     left: 0;
-    animation: 500ms ease word-animation;
+    animation: 500ms ease word-animation forwards;
     z-index: 10;
 }
 
@@ -373,8 +378,28 @@ WORD ANIMATION
 MENU WINDOWS
 -----------------*/
 
-.menu-window {
+.menu-window-container {
     position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4vw;
+}
+
+.menu-background {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+}
+
+.menu-window {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
     z-index: 20;
     padding: 1rem;
     inset: 1rem;
@@ -391,7 +416,8 @@ MENU WINDOWS
 .menu-window p {
     font-size: 1rem;
     font-family: "nunito", sans-serif;
-    margin: 1rem;
+    width: 90%;
+    margin: 1vw 0;
 }
 
 .window-visible {
@@ -413,8 +439,10 @@ MENU WINDOWS
 }
 
 .main-menu-button {
+    position: relative;
     margin: 2vw;
     padding: 1vw;
+    width: 10rem;
 }
 
 /*---------------
@@ -424,7 +452,7 @@ BUTTONS
 .send-word {
     grid-area: send-word;
     font-size: 2rem;
-    margin: 0 2vw 1vw 2vw;
+    margin: 0 16vw 1vw 16vw;
 }
 
 .disabled-button {
@@ -485,7 +513,6 @@ TABLE AND SQUARES
     width: 100%;
     height: 100%;
     line-height: 50%;
-    cursor: pointer;
 }
 
 .over-square,
@@ -493,43 +520,43 @@ TABLE AND SQUARES
     position: absolute;
     height: 100%;
     width: 100%;
-    padding-bottom: 10%;
     box-sizing: border-box;
-    transition: opacity 150ms ease-out, transform 150ms ease-out 150ms, background-color 200ms ease;
+    cursor: pointer;
     font-family: "Bree Serif", serif;
+    padding-bottom: 10%;
 }
 
 .over-square {
-    z-index: 1;
+    background-color: var(--neutral-gray);
+    z-index: 2;
+    transition: transform 150ms ease-out 150ms, opacity 150ms ease;
 }
 
 .under-square {
-    border: 3vw solid var(--dark-gray);
-    background-color: var(--light-gray);
-    // border-radius: 4vw;
+    border: 2.5vw solid var(--dark-gray);
+    transition: transform 150ms ease-out 150ms, background-color 200ms ease;
 }
 
+.under-square {
+    background-color: var(--light-gray);
+}
+
+.over-square-current,
 .over-square-path {
     opacity: 0;
-    transform: scale(1.05);
 }
 
 .under-square-path {
-    transform: scale(1.05);
     background-color: var(--path-gray);
 }
 
 .over-square-current,
 .under-square-current {
     transform: scale(1.1);
-    cursor: pointer;
 }
 
-.over-square-current {
-    opacity: 0%;
-}
-
-.square-non-clickable {
+.square-non-clickable,
+.results-table * {
     cursor: default;
 }
 
@@ -541,8 +568,7 @@ TABLE AND SQUARES
     opacity: 0%;
     height: 100%;
     width: 100%;
-    border-radius: 1.5vw;
-    box-shadow: 0px 0px 5px 2.5vw var(--warning-red);
+    border-radius: 3vw;
     top: 0;
     left: 0;
     transition: opacity 200ms ease-out;
@@ -552,6 +578,10 @@ TABLE AND SQUARES
     opacity: 30%;
 }
 
+/*--------------------------------------------------
+TABLET / LANDSCAPE
+----------------------------------------------------*/
+
 @media (orientation: landscape) {
     button {
         border-radius: 4vh;
@@ -560,27 +590,46 @@ TABLE AND SQUARES
 
     .current-word {
         font-size: 4rem;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
     }
 
     .list-view-container,
-    .misc-container {
+    .results-list-view-container,
+    .misc-container,
+    .results-misc-container {
         border-radius: 5vh;
-        margin-bottom: 2vw;
+        margin: 1.5rem;
+        border: 0.5rem solid var(--light-yellow);
+    }
+
+    .results-misc-container {
+        margin: 1.5rem 0.75rem 1.5rem 1.5rem;
+        grid-template-rows: 1fr 16vh;
+    }
+
+    .results-list-view-container {
+        margin: 1.5rem 1.5rem 1.5rem 0.75rem;
     }
 
     .words,
     .points {
         font-size: 1.3rem;
-        padding-top: 0.6rem;
-        padding-bottom: 0.6rem;
+        padding: 0;
+    }
+
+    .grade {
+        font-size: 2rem;
     }
 
     .send-word {
-        margin-bottom: 2vw;
+        margin: 0 2rem 1.5rem 2rem;
     }
 
     .current-word-container {
-        margin-top: 2vw;
+        margin-top: 1.5rem;
+        border-top: 0.5rem solid var(--middle-yellow);
+        border-bottom: 0.5rem solid var(--middle-yellow);
     }
 
     /*--------------- 
@@ -588,11 +637,11 @@ TABLE AND SQUARES
     -----------------*/
 
     .results {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 50vw;
+        grid-template-columns: 70vh 1fr;
+        grid-template-rows: 50vh 1fr;
         grid-template-areas:
             "misc-container list-view-container"
-            "table table";
+            "table list-view-container";
     }
 
     /*--------------- 
@@ -600,8 +649,19 @@ TABLE AND SQUARES
     -----------------*/
 
     .display-list {
-        margin-left: 1vh;
-        margin-right: 1vh;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    .results .display-list {
+        padding-left: 4vh;
+        padding-right: 4vh;
+    }
+
+    .display-list p,
+    .display-list a {
+        font-size: 1.2rem;
+        height: 1.7rem;
     }
 
     /*--------------- 
@@ -613,7 +673,7 @@ TABLE AND SQUARES
             transform: translate(var(--position-start-x), var(--position-start-y)) scale(1);
         }
         to {
-            transform: translate(var(--position-end-x), var(--position-end-y)) scale(0.25);
+            transform: translate(var(--position-end-x), var(--position-end-y)) scale(0.3);
         }
     }
 
@@ -623,30 +683,201 @@ TABLE AND SQUARES
         font-size: 4rem;
     }
 
+    /*---------------
+    MENU WINDOWS
+    -----------------*/
+
+    .menu-window {
+        width: 40vw;
+        border: 0.5rem solid var(--medium-blue);
+    }
+
+    .menu-window p {
+        margin: 0.4rem 0;
+    }
+
+    .main-menu-button {
+        border-radius: 3vh;
+        font-size: 1.5rem;
+    }
+
     /*--------------- 
     MISC
     -----------------*/
+
     .menu-button {
         width: 12vh;
         height: 12vh;
     }
+
     /*--------------- 
     TABLE AND SQUARES
     -----------------*/
 
     .game-table,
     .results-table {
-        margin: 3vh;
-        gap: 2vh;
+        margin: 1.5rem 0 1.5rem 0;
+        gap: 1vh;
+    }
+
+    .results-table {
+        height: calc(50vh - 2vw);
+        width: 48vh;
+        font-size: 7vh;
+        gap: 1vh;
+        margin: 0 auto;
+        padding: 0;
     }
 
     .over-square,
     .under-square {
-        font-size: 9vh;
+        font-size: 8vh;
         line-height: 50%;
     }
 
     .under-square {
-        border-width: 2vh;
+        border-width: 1.7vh;
+    }
+    .square-non-clickable::before {
+        border-radius: 3vh;
+    }
+}
+
+/*--------------------------------------------------
+LAPTOP / DESKTOP
+----------------------------------------------------*/
+
+@media (min-width: 1025px) {
+    .page {
+        background-color: var(--dark-gray);
+        display: grid;
+        width: 100%;
+        height: 100vh;
+        grid-template-columns: 1fr 1000px 1fr;
+        grid-template-rows: 1fr 618px 1fr;
+        grid-template-areas:
+            ". . ."
+            ". wrapper ."
+            ". . .";
+    }
+
+    .wrapper {
+        grid-area: wrapper;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    button {
+        border: 0.4rem solid var(--dark-gray);
+        border-radius: 1.5rem;
+    }
+
+    .misc-container,
+    .list-view-container,
+    .results-misc-container,
+    .results-list-view-container {
+        border-radius: 2rem;
+    }
+
+    .results-list-view-container {
+        margin: 1.5rem auto;
+        width: 35ch;
+    }
+
+    .misc-container,
+    .results-misc-container {
+        grid-template-rows: 1fr 7rem;
+    }
+
+    /*--------------- 
+    VIEWS
+    -----------------*/
+
+    .results .display-list {
+        padding: 0 1.5rem;
+    }
+
+    /*--------------- 
+    VIEWS
+    -----------------*/
+
+    .game-active {
+        grid-template-columns: 1fr 314px 1fr; //304px = 2x8rem + 2x1.5rem margin.
+        grid-template-rows: 8rem 1fr 8rem;
+        grid-template-areas:
+            "current-word current-word current-word"
+            "misc-container table list-view-container"
+            "misc-container send-word list-view-container";
+    }
+
+    .results {
+        grid-template-columns: 433px 1fr;
+        grid-template-rows: 309px 1fr;
+    }
+
+    .view-out {
+        transform: translateX(-1000px);
+        transition: transform 500ms ease-in-out;
+    }
+
+    @keyframes view-in {
+        from {
+            transform: translateX(1000px);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    /*---------------
+    MENU WINDOWS
+    -----------------*/
+
+    .menu-window-container {
+        padding: 1rem;
+    }
+
+    .menu-window {
+        border-radius: 2rem;
+        width: 400px;
+    }
+
+    .menu-button {
+        width: 5rem;
+        height: 5rem;
+    }
+
+    .main-menu-button {
+        margin: 0.5rem;
+        padding: 0.8rem;
+        border-radius: 1.5rem;
+    }
+
+    /*--------------- 
+    TABLE AND SQUARES
+    -----------------*/
+
+    .over-square,
+    .under-square {
+        border-radius: 1.2rem;
+        font-size: 3rem;
+    }
+
+    .under-square {
+        border: 0.7rem solid var(--dark-gray);
+    }
+
+    .game-table {
+        gap: 0.4rem;
+    }
+
+    .results-table {
+        height: 261px;
+        width: 261px;
+        font-size: 2.5rem;
+        gap: 0.3rem;
+        margin: 0 auto;
+        padding: 0;
     }
 }

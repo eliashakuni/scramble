@@ -3,7 +3,7 @@ import Timer from "./Timer.jsx";
 import { scoreCounter, wordCounter, grade } from "./helperFunctions.js"
 
 const Misc = (props) => {
-    let hamburgerSize = (props.screenSize[0] > props.screenSize[1]) ? (props.screenSize[1] / 15).toString() : (props.screenSize[0] / 11).toString(); //SVG hamburger-menu figure size
+    let hamburgerSize = ((props.screenSize[0] > 1025) ? 50 : ((props.screenSize[0] > props.screenSize[1]) ? (props.screenSize[1] / 15).toString() : (props.screenSize[0] / 11).toString())); //SVG hamburger-menu figure size
 
     const createTimer = () => {
         if (props.viewType === "game-active") {
@@ -25,7 +25,7 @@ const Misc = (props) => {
     let score = scoreCounter(props.guessList, props.guessResultList);
 
     return (
-        <div className="misc-container">
+        <div className={((props.viewType === "game-active") ? "" : "results-") + "misc-container"}>
             <div className="timer-and-score-container">
                 <p className="points">Pisteet: {score}/{props.maxPoints}</p>
                 {createTimer()}
